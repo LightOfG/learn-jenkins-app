@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-        
 
         stage('Build') {
             agent {
@@ -13,6 +12,7 @@ pipeline {
             }
             steps {
                 sh '''
+                    sudo chown -R $(whoami) /var/jenkins_home/workspace/learn-jenkins-app
                     ls -la
                     node --version
                     npm --version
@@ -22,7 +22,6 @@ pipeline {
                 '''
             }
         }
-        
 
         stage('Tests') {
             parallel {
@@ -70,6 +69,21 @@ pipeline {
                         }
                     }
                 }
+            }
+        }
+
+        stage('Deploy') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    npm install netlify-cli
+                    node_modules/.bin/netlify --version
+                '''
             }
         }
     }
