@@ -7,12 +7,12 @@ pipeline {
             agent {
                 docker {
                     image 'node:18-alpine'
+                    args '-u root'
                     reuseNode true
                 }
             }
             steps {
                 sh '''
-                    sudo chown -R $(whoami) /var/jenkins_home/workspace/learn-jenkins-app
                     ls -la
                     node --version
                     npm --version
@@ -29,6 +29,7 @@ pipeline {
                     agent {
                         docker {
                             image 'node:18-alpine'
+                            args '-u root'
                             reuseNode true
                         }
                     }
@@ -76,6 +77,7 @@ pipeline {
             agent {
                 docker {
                     image 'node:18-alpine'
+                    args '-u root'
                     reuseNode true
                 }
             }
